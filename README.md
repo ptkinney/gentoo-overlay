@@ -1,2 +1,2 @@
-# gentoo-overlay
+# ptkinney-overlay
 ptkinney Gentoo overlay
