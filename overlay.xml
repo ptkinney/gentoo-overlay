@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<repositories version="1.0">
+<repo priority="50" status="unofficial">
+	<name>ptkinneyoverlay</name>
+	<description>ptkinney Gentoo Overlay</description>
+	<homepage></homepage>
+	<owner>
+		<email>ptk1776@gmail.com</email>
+		<name>Paul Kinney</name>
+	</owner>
+	<source type="git">git://github.com/ptkinney/ptkinney-overlay.git</source>
+<feed>https://github.com/ptkinney/ptkinney-overlay/commits/master.atom</feed>
+</repo>
+</repositories>
