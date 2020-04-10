@@ -35,7 +35,7 @@ src_unpack() {
 
 src_install() {
 	dodir /usr/share
-	cp -aR "${S}"/usr/share "${ED}"/usr/share
+	cp -aR "${S}"/usr/share "${ED}"/usr
 
 	dodir /usr/$(get_libdir)
 	cp -a "${S}"/usr/lib*/* "${ED}"/usr/$(get_libdir)
