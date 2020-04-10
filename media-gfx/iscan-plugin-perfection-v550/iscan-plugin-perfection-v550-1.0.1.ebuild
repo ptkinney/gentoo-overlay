@@ -38,5 +38,5 @@ src_install() {
 	cp -aR "${S}"/usr/share/iscan "${ED}"/usr/share
 
 	dodir /opt/iscan/$(get_libdir)
-	cp -a "${S}"/usr/lib*/* "${ED}"/opt/iscan/$(get_libdir)
+	cp -a "${S}"/usr/lib*/iscan/* "${ED}"/opt/iscan/$(get_libdir)
 }
