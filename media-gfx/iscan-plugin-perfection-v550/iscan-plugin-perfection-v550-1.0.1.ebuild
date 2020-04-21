@@ -28,7 +28,7 @@ BDEPEND="app-arch/deb2targz"
 
 src_unpack() {
 	default
-	mv ./iscan-bundle-${ISCAN_VERSION}.x64.deb/plugins/iscan-perfection-v550_*_amd64.deb ${P}.deb || die
+	mv ./iscan-perfection-v550-bundle-${ISCAN_VERSION}.x64.deb/plugins/iscan-plugin-perfection-v550_*_amd64.deb ${P}.deb || die
 	mkdir ${P} || die
 	cd ${P} || die
 	unpack ../${P}.deb
