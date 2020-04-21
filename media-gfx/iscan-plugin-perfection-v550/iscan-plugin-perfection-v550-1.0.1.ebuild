@@ -3,6 +3,8 @@
 
 EAPI=7
 
+FIRMWARE="esfweb.bin"
+
 DESCRIPTION="Epson Perfection V550 PHOTO scanner plugin for EPSON scanners (nonfree)"
 
 HOMEPAGE="http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX"
@@ -39,6 +41,60 @@ src_install() {
 	exeinto /usr/lib/iscan
 	doexe usr/lib/iscan/*
 
-	#gunzip usr/share/doc/iscan-perfection-v550/*.gz
-	#dodoc usr/share/doc/iscan-perfection-v550/*
+	insinto /usr/share/iscan-data/device
+	doins usr/share/iscan-data/device/*.xml
+
+	insinto /usr/share/iscan
+	doins usr/share/iscan/*.bin
+
+	gunzip usr/share/doc/iscan-plugin-perfection-v550/*.gz
+	dodoc usr/share/doc/iscan-plugin-perfection-v550/*
+}
+
+pkg_setup() {
+	basecmds=(
+		"iscan-registry --COMMAND interpreter usb 0x04b8 0x013b /usr/lib/iscan/libiscan-plugin-perfection-v550 /usr/share/iscan/${FIRMWARE}"
+	)
+}
+
+pkg_postinst() {
+	elog
+	elog "Firmware file ${FIRMWARE} for ${SCANNER}"
+	elog "has been installed in /usr/share/iscan."
+	elog
+
+	# Only register scanner on new installs
+	[[ -n ${REPLACING_VERSIONS} ]] && return
+
+	# Needed for scanner to work properly.
+	if [[ ${ROOT} == "/" ]]; then
+		for basecmd in "${basecmds[@]}"; do
+			eval ${basecmd/COMMAND/add}
+		done
+		elog "New firmware has been registered automatically."
+		elog
+	else
+		ewarn "Unable to register the plugin and firmware when installing outside of /."
+		ewarn "execute the following command yourself:"
+		for basecmd in "${basecmds[@]}"; do
+			ewarn "${basecmd/COMMAND/add}"
+		done
+	fi
+}
+
+pkg_prerm() {
+	# Only unregister on on uninstall
+	[[ -n ${REPLACED_BY_VERSION} ]] && return
+
+	if [[ ${ROOT} == "/" ]]; then
+		for basecmd in "${basecmds[@]}"; do
+			eval ${basecmd/COMMAND/remove}
+		done
+	else
+		ewarn "Unable to register the plugin and firmware when installing outside of /."
+		ewarn "execute the following command yourself:"
+		for basecmd in "${basecmds[@]}"; do
+			ewarn "${basecmd/COMMAND/remove}"
+		done
+	fi
 }
