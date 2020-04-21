@@ -37,7 +37,7 @@ src_unpack() {
 
 src_install() {
 	exeinto /usr/lib/iscan
-	doexe usr/lib/iscan/network
+	doexe usr/lib/iscan/*
 
 	gunzip usr/share/doc/iscan-perfection-v550/*.gz
 	dodoc usr/share/doc/iscan-perfection-v550/*
