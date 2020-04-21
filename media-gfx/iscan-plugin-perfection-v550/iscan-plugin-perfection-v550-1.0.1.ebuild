@@ -1,42 +1,44 @@
-EAPI="6"
+# Copyright 1999-2019 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
 
-inherit rpm
+EAPI=7
 
-BUNDLE_NAME="iscan-perfection-v550-bundle"
-BUNDLE_VERSION="2.30.4"
+DESCRIPTION="Epson Perfection V550 PHOTO scanner plugin for EPSON scanners (nonfree)"
 
-DESCRIPTION="Epson Perfection V550 PHOTO scanner plugin for SANE 'epkowa' backend."
 HOMEPAGE="http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX"
-SRC_URI=" amd64? ( https://download2.ebz.epson.net/iscan/plugin/perfection-v550/rpm/x64/${BUNDLE_NAME}-${BUNDLE_VERSION}.x64.rpm.tar.gz )
-	x86? ( https://download2.ebz.epson.net/iscan/plugin/perfection-v550/rpm/x86/${BUNDLE_NAME}-${BUNDLE_VERSION}.x86.rpm.tar.gz ) "
+# This is distributed as part of the "bundle driver"; since we already have the
+# opensource part separately we just install the nonfree part here.
 
-LICENSE="AVASYS"
+ISCAN_VERSION="2.30.4"
+
+SRC_URI="https://download2.ebz.epson.net/iscan/plugin/perfection-v550/deb/x64/iscan-perfection-v550-bundle-${ISCAN_VERSION}.x64.deb.tar.gz"
+
+LICENSE="EPSON-2018"
+
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
 
-IUSE=""
+KEYWORDS="~amd64"
+# No keywords since I havent really gotten it to work yet. However, installation
+# locations are clearly correct... may be a hardware/network problem on my side.
 
-DEPEND=">=media-gfx/iscan-2.30.0"
-RDEPEND="${DEPEND}"
+RESTRICT="bindist mirror strip"
+
+RDEPEND="media-gfx/iscan"
+BDEPEND="app-arch/deb2targz"
 
 src_unpack() {
 	default
-
-	local RPM_LOCATION="${WORKDIR}/${BUNDLE_NAME}-${BUNDLE_VERSION}.${ARCH/amd/x}.rpm"
-	local PLATFORM="x86_64"
-
-	if use x86; then
-		PLATFORM="i386"
-	fi
-
-	mkdir "${WORKDIR}/${P}" || die "failure create directory"
-	rpm2tar -O "${RPM_LOCATION}/plugins/${P}-1.${PLATFORM}.rpm" | tar xf - -C "${WORKDIR}/${P}" || die "failure unpacking ${a}"
+	mv ./iscan-bundle-${ISCAN_VERSION}.x64.deb/plugins/iscan-perfection-v550_*_amd64.deb ${P}.deb || die
+	mkdir ${P} || die
+	cd ${P} || die
+	unpack ../${P}.deb
+	unpack "${S}/data.tar.gz"
 }
 
 src_install() {
-	dodir /usr/share/iscan
-	cp -aR "${S}"/usr/share/iscan "${ED}"/usr/share
+	exeinto /usr/lib/iscan
+	doexe usr/lib/iscan/network
 
-	dodir /opt/iscan/$(get_libdir)
-	cp -a "${S}"/usr/lib*/iscan/* "${ED}"/opt/iscan/$(get_libdir)
+	gunzip usr/share/doc/iscan-perfection-v550/*.gz
+	dodoc usr/share/doc/iscan-perfection-v550/*
 }
