@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -15,7 +15,7 @@ ISCAN_VERSION="2.30.4"
 
 SRC_URI="https://download2.ebz.epson.net/iscan/plugin/perfection-v550/deb/x64/iscan-perfection-v550-bundle-${ISCAN_VERSION}.x64.deb.tar.gz"
 
-LICENSE="EPSON-2018"
+LICENSE="AVASYS"
 
 SLOT="0"
 
